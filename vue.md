@@ -22,7 +22,14 @@
 
 1.下载安装程序（更多方法请访问[webpack](https://yarn.bootcss.com/docs/install#windows-stable)）
 
-下载一个 **.msi** 文件  使用此程序， 需要先安装**Node.js**
+- 使用**npm**命令
+
+```shell
+npm insatll yarn -g
+```
+
+- 下载一个 **.msi** 文件  使用此程序， 需要先安装**Node.js**
+
 
 <img src="C:\Users\唐\Desktop\笔记\images\vue\yarn文件.png" alt="yarn文件" style="zoom:60%;" />
 
@@ -382,11 +389,315 @@ console.log('father点击了');
 
 作用：监听键盘事件
 
-语法：@keyup.enter
+语法：`@keyup.enter`
 
 示例：
 
 ```vue
+<template>
+  <div>
+    <!-- 2.值 -->
+    <input type="text" @keyup.enter="enterFn">
+  </div>
+</template>
 
+<script>
+export default {
+  methods:{
+    enterFn(){
+      console.log('用户按下了回车');
+    }
+  }
+};
+</script>
+```
+
+### Vue指令-v-model（双向绑定）
+
+作用：value属性和vue数据变量，双向绑定到一起
+
+语法：v-model="Vue数据变量"
+
+说明：
+
+- 变量变化 ->视图自动同步
+- 视图变化 ->变量自动同步
+
+示例：
+
+```vue
+<template>
+  <div>
+    <label for="">账号</label><input type="text" v-model="username" />
+    <!-- v-model
+    双向数据绑定
+    value属性 - vue变量 
+    -->
+    <hr />
+    <label for="">密码</label><input type="password" v-model="pass"/>
+  </div>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      username: "",
+      pass:"",
+    };
+  },
+};
+</script>
+```
+
+### Vue指令-v-model（双向绑定）绑定不同表单标签
+
+下拉框：下拉菜单绑定到section上 
+
+复选框：
+
+- 遇到复选框，`v-model`绑定到各个复选框 ，
+- 非数组类型  - 关联的是复选框的`checked`属性
+- 数组类型   - 关联的是复选框的`value`属性
+
+```vue
+<template>
+  <div>
+    <!-- v-model
+    双向数据绑定
+    value属性 - vue变量 
+    -->
+    <div>
+      <span>来自与：</span>
+      <!-- 下拉菜单绑定到section上 -->
+      <select name="" id="" v-model="from">
+        <option value="北京市">北京</option>
+        <option value="长沙市">长沙</option>
+        <option value="武汉市">武汉</option>
+        <option value="深圳市">深圳</option>
+      </select>
+    </div>
+    <div>
+      <span>爱好：</span>
+      <input type="checkbox" value="抽烟" v-model="hobby" />抽烟
+      <input type="checkbox" value="喝酒" v-model="hobby" />喝酒
+      <input type="checkbox" value="吃肥肉" v-model="hobby" />吃肥肉
+    </div>
+    <div>
+      <span>性别：</span>
+      <input type="radio" name="" id="" value="男" v-model="gender"/>男
+      <input type="radio" name="" id="" value="女" v-model="gender"/>女
+    </div>
+    <div>
+      <span>自我介绍</span>
+      <textarea v-model="intro"></textarea>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      from: "",
+      hobby: [],
+      gender:"男",
+      intro:"",
+    };
+  },
+};
+</script>
+```
+
+### Vue指令-v-model（双向绑定）修饰符
+
+语法：`v-model.修饰符="Vue数据变量"`
+
+参数：
+
+| 参数    | 说明                      |
+| ------- | ------------------------- |
+| .number | 以parsFloat转成数字类型   |
+| .trim   | 去除首尾空白字符          |
+| .lazy   | 在change时触发而非input时 |
+
+```vue
+<template>
+  <div>
+   <div>
+     <span>年龄</span>
+     <!-- 转换为parseFloat类型 尝试转-->
+     <input type="number" v-model.number="age">
+   </div>
+   <div>
+     <span>人生格言</span>
+     <!-- 去除首尾两边空格 -->
+     <input type="text" v-model.trim="motto">
+   </div>
+   <div>
+     <span>个人简介</span>
+     <!-- 在change时触发而非input时  只有失去焦点才会执行-->
+     <textarea v-model.lazy="intro"></textarea>
+   </div>
+  </div>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+     age:0,
+     motto:"",
+     intro:"",
+    };
+  },
+};
+</script>
+```
+
+### Vue指令-v-text和v-html
+
+语法：
+
+- v-text="Vue数据变量"
+- v-html="Vue数据变量"
+
+注意：会覆盖插值表达式{{}}
+
+示例：
+
+```vue
+<template>
+  <div>
+   <p v-text="str"></p>
+   <p v-html="str"></p>
+   <p>{{10+20}}</p>
+  </div>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+    str:"<span>Wosdas</span>",
+    }
+  }
+};
+</script>
+```
+
+### Vue指令-v-show和v-if的使用
+
+作用：控制标签的隐藏或出现
+
+语法：
+
+- v-show="Vue变量"
+- v-if="Vue变量"
+
+区别：
+
+- `v-show`：隐藏方式`display:none`
+- `v-if`:采用从DOM树直接移除
+
+```vue
+<template>
+  <div>
+    <!-- v-show -->
+    <h1 v-show="isShow">我是h1</h1>
+    <h2 v-if="isOk">我是h2</h2>
+    <p v-if="age >=18">成年了</p>
+    <p v-else>未成年</p>
+  </div>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      isShow:true,
+      isOk:false,
+      age:18,
+    };
+  },
+};
+</script>
+```
+
+### Vue指令-v-for
+
+作用：可以遍历数组 / 对象 / 数字 / 字符串 (可遍历结构)
+
+语法：
+
+- v-for="(值变量，索引变量)in 目标结构"
+- v-for="值变量 in 目标结构"
+
+注意:  
+
+- v-for的临时变量名不能用到v-for范围外
+- 口诀: 让谁循环生成, v-for就写谁身上 
+
+```vue
+<template>
+  <div>
+    <ul>
+      <!-- v-for="(值变量，索引变量)in 目标结构" -->
+      <li v-for="(item ,index) in arr"
+      :key="index">
+        {{ item }} ----{{ index }}
+      </li>
+    </ul>
+    <!-- v-for="值变量 in 目标结构" -->
+    <ul>
+      <li v-for="obj in stuArr" :key="obj.id">
+        <span>{{ obj.name }}</span>
+        <span>{{ obj.sex }}</span>
+        <span>{{ obj.hobby }}</span>
+      </li>
+    </ul>
+    <!-- v-for="(value,key) in 对象" -->
+    <div>
+      <p v-for="(value,key) in tObj" :key="value">
+       <span> {{value}}</span>
+       ======
+       <span> {{ key }}</span>
+      </p>
+    </div>
+    <!-- v-for="变量名 in 固定数字" -->
+    <div v-for="n in count" :key="n">{{n}}</div>
+  </div>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+       arr: ["小明", "小欢欢", "大黄"],
+      stuArr: [
+        {
+          id: 1001,
+          name: "孙悟空",
+          sex: "男",
+          hobby: "吃桃子",
+        },
+        {
+          id: 1002,
+          name: "猪八戒",
+          sex: "男",
+          hobby: "背媳妇",
+        },
+      ],
+      tObj: {
+        name: "小黑",
+        age: 18,
+        class: "1期",
+      },
+      count: 10,
+    }
+  },
+  
+}
+</script>
 ```
 
